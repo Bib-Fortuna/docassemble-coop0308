@@ -1,0 +1,170 @@
+---
+#c1 assessment by coop0308
+objects:
+  - endpoint: DADict
+---
+
+mandatory: True
+question: Welcome
+subquestion: |
+  Federal Court Form 1 completion site
+  
+  ***Disclaimer:***
+  **This form is not legally binding and should be used only in 
+  consult with a lawyer.**
+  
+  If you accept these conditions you may continue.
+buttons:
+  - "I accept and want to continue": continue
+  - "I do not accept": exit
+    url: http://www.courts.sa.gov.au
+    
+---
+
+mandatory: True
+code: |
+  if courtType == 'Federal Court' or courtType == 'Federal Circuit Court':
+    endpoint['eligible']
+  else:
+    endpoint['ineligible']
+    
+---
+
+question: Court Type
+subquestion: |
+  Please select the desired court:
+fields:
+  - Court: courtType
+    choices:
+      - Supreme Court
+      - District Court
+      - Magistrates Court
+      - Federal Court
+      - Federal Circuit Court
+      
+---
+
+event: endpoint['ineligible']
+question: Eligibility requirements not met
+subquestion:
+  It appears you do not meet our eligibility requirements.  You cannot use
+  this service.
+  
+  Please refer to the SA courts government website. 
+  This can be accessed upon clicking the exit button.
+  
+buttons:
+  - Exit: exit
+    url: http://www.courts.sa.gov.au
+  - Restart: restart
+  
+---
+
+#military date format cause i can, although all month letters are meant to be capatilised i didnt spend time looking up how to do that
+event: endpoint['eligible']
+question: You are eligible
+subquestion: |
+
+  Question|Answer
+  ---|---
+  Court| ${ courtType }
+  Applicant| ${ appFirstName } ${ appLastName }
+  Respondent| ${ resFirstName } ${ resLastName }
+  State| ${ stateAb }
+  Division| ${ division }
+  Filing Date| ${ format_date(filingDate, format=' dd MMM yy') }
+  Lawyer Name | ${ lawyerName }
+  Law Firm | ${ lawFirm }
+  Who is Lawyer representing? | ${ lawyerRep }
+  Firm contact information | Phone: ${ firmPhone } 
+   | Fax: ${ firmFax } 
+   | Email: ${ firmEmail } 
+   | Address: ${ firmAdd }
+  
+attachments:
+  docx template file: FCA_form001_20110801.docx
+  valid formats:
+    - pdf
+buttons:
+  - Exit: exit
+    url: http://www.courts.sa.gov.au
+  - Restart: restart
+---
+question: Party Names
+subquestion: |
+  Enter the names of the Applicant and Respondent.
+fields:
+  - Applicant First Name: appFirstName
+    required: False
+  - Applicant Last Name: appLastName
+  - Respondent First Name: resFirstName
+    required: False
+  - Respondent Last Name: resLastName
+under: |
+  If either party is a company, leave the first name 
+  fields blank and enter te full company name in the last name fields only.
+---
+question: Court
+subquestion: |
+  Select State and Division.
+fields:
+  - Select State: state
+    choices:
+      - Queensland
+      - New South Wales
+      - Victoria
+      - South Australia
+      - Tasmania
+      - Western Australia
+  - Select Division: division
+    choices:
+      - Corporations
+      - Criminal
+      - Employment
+      - General
+---
+#i wanted to abbreviate each state, so here's that 
+code: |
+   if state == 'Queensland':
+     stateAb = 'QLD'
+   if state == 'New South Wales':
+     stateAb = 'NSW'
+   if state == 'Victoria':
+     stateAb = 'VIC'
+   if state == 'Tasmania':
+     stateAb = 'TAS'
+   if state == 'South Australia':
+     stateAb = 'SA'
+   if state == 'Western Australia':
+     stateAb = 'WA'
+---
+question: Date
+subquestion: |
+  What date was the form filed?
+fields:
+  - Filing Date: filingDate
+    datatype: date
+---
+question: Lawyer
+subquestion: |
+  Fill in your lawyer's details.
+fields:
+  - Full Name of Lawyer (excluding middle name): lawyerName
+  - Who is this lawyer representing: lawyerRep
+    datatype: radio
+    choices:
+      - Applicant
+      - Respondent
+  - Name of Law Firm: lawFirm
+  - Firm Phone Number: firmPhone
+  - Firm Fax Number: firmFax
+  - Firm Email: firmEmail
+    datatype: email
+  - Firm Address (include state and postcode): firmAdd
+---
+code: |
+  if lawyerRep == 'Applicant':
+    lawyerBeh = '{} {}' .format(appFirstName, appLastName)
+  if lawyerRep == 'Respondent':
+    lawyerBeh = '{} {}' .format(resFirstName, resLastName)
+---

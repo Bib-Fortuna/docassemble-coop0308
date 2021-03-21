@@ -1,0 +1,52 @@
+---
+mandatory: True
+question: Age Pension
+subquestion: |
+
+ 
+
+  %if MJFhaspartner == 'Yes':
+    'Hello ${ MJFname }.'
+    
+    'Your Partner's name is ${ MJFpartnername }'
+    'Your annual income is ' + currency(MJFannualincome) + ' and ${ MJFpartnername }'s 
+    annual income is currency(MJFpartnerincome)'
+    'Your total household income is' + currency(MJFannualincome + MJFpartnerincome)
+    'Your average household income is' + currency((MJFannualincome + MJFpartnerincome) / 2)
+  %endif
+
+
+---
+code: |
+  if MJFannualincome > 0:
+    MJFincomemessage = 'with an annual income of ' + currency(MJFannualincome) + '.'
+  elif MJFannualincome == 0:
+    MJFincomemessage = 'with no income.'
+---
+question: Who are you?
+fields:
+  - Name: MJFname
+  - Age: MJFage
+    datatype: integer
+  - Income: MJFannualincome
+    datatype: float
+    help: |
+      Input the amount of money that you earn 
+      each fiscal year, including benefits and allowances.
+---
+question: Relationship
+fields:
+  - Do you have a Partner?: MJFhaspartner
+    datatype: radio
+      - Yes
+      - No
+  - What is your partner's name?: MJFpartnername
+    show if:
+      variable: MJFhaspartner
+      is: 'Yes'
+  - What is you partner's income?: MJFpartnerincome
+    datatype: float
+    show if:
+      variable: MJFhaspartner
+      is: 'Yes'
+---
