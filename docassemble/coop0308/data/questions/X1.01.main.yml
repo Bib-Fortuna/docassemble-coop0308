@@ -33,19 +33,12 @@ include:
 mandatory: True
 question: Breach of Contract App
 subquestion: |
-  This is the first or 'Welcome' screen that the user
-  sees when they run the app.  This screen should describe
-  what the app does to the user.
+  Welcome to the 'Breach of Contract' interview.
+  
+  This interview will determine whether you have the potential to sue another party for wrongdoing.
 
-  The screen may also need to include a disclaimer, particularly
-  as this app is providing legal advice.
+  *Disclaimer*: This form is not legally binding. It is recommended that you seek legal advice following the completion of this form.
 
-  The screen should contain a click-through agreement indicating
-  the user agrees to the disclaimer and any other terms before
-  proceeding.
-
-  The screen should also give the user the option to exit the
-  app at this point
 buttons:
   - I agree and wish to continue: continue
   - I do not agree and wish to exit: exit

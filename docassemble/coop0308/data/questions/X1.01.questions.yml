@@ -23,7 +23,7 @@ fields:
       - Someody didn't pay me for work that I did: MJFpromisor
 ---
 # Stores the description of the work that was requested
-question: Describe the work.
+question: What was the work that was conducted?
 fields:
   - no label: MJFwork_requested
     datatype: area
@@ -34,7 +34,7 @@ terms:
   promisee: |
     Party who has not had agreed work completed by offending party
 fields:
-  - What was the agreed payment for work completed: MJFpayment_agreed
+  - What was the agreed payment for work completed?: MJFpayment_agreed
     datatype: currency
     min: 0
 under: |
