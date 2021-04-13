@@ -46,6 +46,24 @@ code: |
 ---
 # Other categories go here...
 # This is an exercise for students
+code: |
+  HAAdisplay_.clear()
+  for HAAagency in HAAqualifying_agencies:
+  
+    if HAAagency.item('printed') == True:
+    
+      pass
+    elif HAAagency.item('atsi_test') == True:
+     
+      HAAdisplay_atsi.append(HAAagency)
+      
+      HAAagency['printed'] = True
+    else:
+     
+      pass
+  
+  HAAdisplay_atsi.gathered = True
+
 ---
 # Finally, we display everything else.  Everything else
 # is every record in HAAqualifying_agencies that has
